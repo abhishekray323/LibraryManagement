@@ -1,12 +1,12 @@
-package com.example.LibraryManagement.entity;
+package com.example.LibraryManagement.models.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.catalina.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -15,35 +15,23 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-
-public class Books {
-
+public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
+
     String name;
-    String isbn;
 
-    @OneToMany
-    @JoinColumn
-    Author associatedAuthor;
+    @OneToMany(mappedBy = "associatedAuthor")
+    List<Books> associatedBooks;
 
-    @ManyToOne
-    @JoinColumn
-    UserInfo loanedTo;
-
-    @Enumerated(value = EnumType.STRING)
-    BookStatus bookStatus;
+    @Column(unique = true)
+    String emailId;
 
     @CreationTimestamp
     LocalDateTime creationTime;
 
     @UpdateTimestamp
     LocalDateTime updatedTime;
-
-    @PrePersist
-    void prePersist(){
-        this.bookStatus = BookStatus.AVAILABLE;
-    }
 
 }
