@@ -23,7 +23,7 @@ public class Books {
     String name;
     String isbn;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn
     Author associatedAuthor;
 

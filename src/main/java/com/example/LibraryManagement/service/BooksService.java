@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -17,5 +17,9 @@ public class BooksService {
 
     public Books saveOrUpdate(Books books){
         return bookRepository.save(books);
+    }
+
+    public Optional<Books> getBooksByIsbn(String isbn){
+        return bookRepository.getBooksByIsbn(isbn);
     }
 }

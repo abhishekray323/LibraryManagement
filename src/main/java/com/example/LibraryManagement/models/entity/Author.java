@@ -15,6 +15,8 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@Table(indexes = {@Index(name="UNIQUE_EMAIL", columnList = "emailId", unique = true)})
+
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -25,7 +27,7 @@ public class Author {
     @OneToMany(mappedBy = "associatedAuthor")
     List<Books> associatedBooks;
 
-    @Column(unique = true)
+    @Column(nullable = false)
     String emailId;
 
     @CreationTimestamp

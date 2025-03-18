@@ -23,7 +23,7 @@ public class UserInfo {
     String name;
 
 
-    @OneToMany(mappedBy = "usersInfo")
+    @OneToMany(mappedBy = "loanedTo")
     List<Books> booksLended;
 
     @Column(unique = true)

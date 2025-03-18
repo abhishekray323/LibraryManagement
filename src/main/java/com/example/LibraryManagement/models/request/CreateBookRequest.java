@@ -1,5 +1,7 @@
 package com.example.LibraryManagement.models.request;
 
+import com.example.LibraryManagement.models.entity.Author;
+import com.example.LibraryManagement.models.entity.Books;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -14,4 +16,17 @@ public class CreateBookRequest {
     String authorName;
     @NotNull
     String authorEmail;
+
+    public Books toBook(){
+        var associatedAuthor =  Author.builder()
+                .name(authorName)
+                .emailId(authorEmail)
+                        .build();
+
+        return Books.builder()
+                .name(name)
+                .isbn(isbn)
+                .associatedAuthor(associatedAuthor)
+                .build();
+    }
 }
