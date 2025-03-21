@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
 
@@ -26,5 +23,10 @@ public class BooksController {
     @PostMapping(value="", produces = MediaType.APPLICATION_JSON_VALUE , consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Books> addBook(@RequestBody @Valid CreateBookRequest createBookRequest){
         return new ResponseEntity<>(catalogueService.addBookToCatalogue(createBookRequest), HttpStatus.CREATED);
+    }
+
+    @GetMapping(value="/book/isbn/{id}", produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<Books> getBooks(@PathVariable("id") String isbn){
+        return new ResponseEntity<>(catalogueService.getBooks(isbn), HttpStatus.OK);
     }
 }

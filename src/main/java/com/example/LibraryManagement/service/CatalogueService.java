@@ -21,7 +21,6 @@ public class CatalogueService {
     @Autowired
     BooksService booksService;
 
-    @Transactional
     public Books addBookToCatalogue(CreateBookRequest createBookRequest){
         var inMemoryBook = createBookRequest.toBook();
         Optional<Author> existingAuthor = authorService.getAuthorByemailId(inMemoryBook.getAssociatedAuthor().getEmailId());
@@ -30,7 +29,7 @@ public class CatalogueService {
             authorService.saveOrUpdate(inMemoryBook.getAssociatedAuthor());
         }
 
-        Optional<Books> existingBooks = booksService.getBooksByIsbn(inMemoryBook.getName());
+        Optional<Books> existingBooks = booksService.getBooksByIsbn(inMemoryBook.getIsbn());
 
         if(existingBooks.isPresent()){
             throw new BookAlreadyExistException(ExceptionCode.BOOK_ALREADY_EXISTS);
@@ -39,4 +38,14 @@ public class CatalogueService {
         //MAKE Controller after this
         return booksService.saveOrUpdate(inMemoryBook);
     }
+
+    public Books getBooks( String isbn){
+        Optional<Books> existingBooks = booksService.getBooksByIsbn(isbn);
+
+        if(existingBooks.isEmpty()){
+            throw new BookAlreadyExistException(ExceptionCode.BOOK_NOT_FOUND);
+        }
+        return existingBooks.get();
+    }
+
 }

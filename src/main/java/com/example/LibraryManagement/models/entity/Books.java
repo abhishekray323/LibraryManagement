@@ -1,6 +1,8 @@
 package com.example.LibraryManagement.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,6 +27,7 @@ public class Books {
 
     @ManyToOne
     @JoinColumn
+    @JsonIgnoreProperties(value="associatedBooks")
     Author associatedAuthor;
 
     @ManyToOne

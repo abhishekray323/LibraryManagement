@@ -29,5 +29,6 @@ public class UserInfo {
     @Column(unique = true)
     String emailId;
 
+    @Column( length = 15, unique = true)
     Long phoneNumber;
 }
