@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,8 +27,8 @@ public class BooksService {
         return bookRepository.getBooksByIsbn(isbn);
     }
 
-    public Page<Books> getBooksByNameStartsWith(String nameStartsWith){
-        Pageable pageable = PageRequest.of(1, 10);
-        return bookRepository.findAllByNameStartingWith(nameStartsWith, pageable);
+    public Page<Books> getBooksByNameStartsWith(String nameStartsWith, int pageNumber){
+        PageRequest pageRequest = PageRequest.of(pageNumber, 3, Sort.by(Sort.Direction.DESC, "createAt"));
+        return bookRepository.findByNameStartingWith(nameStartsWith, pageRequest);
     }
 }

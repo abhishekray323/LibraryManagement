@@ -23,7 +23,7 @@ public class CatalogueService {
 
     Author checkIfAuthorExistOrNotAndAddAuthorIfNotExist(Books book){
         Optional<Author> existingAuthor = authorService.getAuthorByemailId(book.getAssociatedAuthor().getEmailId());
-        return existingAuthor.orElseGet(() -> authorService.saveOrUpdate(book.getAssociatedAuthor())).get();
+        return existingAuthor.orElseGet(() -> authorService.saveOrUpdate(book.getAssociatedAuthor()));
     }
 
     Books saveInMemoryBookAndIfNotExistThrowError(Books books) throws  BookAlreadyExistException{

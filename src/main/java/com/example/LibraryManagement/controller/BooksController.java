@@ -34,4 +34,9 @@ public class BooksController {
     public ResponseEntity<Books> getBooks(@PathVariable("id") String isbn){
         return new ResponseEntity<>(catalogueService.getBooks(isbn), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/name/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<Books>> getBooksByName(@PathVariable("name") String nameStartsWith, @RequestParam(required = false)int pageNumber){
+        return new ResponseEntity<>(booksService.getBooksByNameStartsWith(nameStartsWith, pageNumber), HttpStatus.OK);
+    }
 }
