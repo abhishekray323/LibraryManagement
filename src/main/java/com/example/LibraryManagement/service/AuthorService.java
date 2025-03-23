@@ -14,8 +14,9 @@ public class AuthorService {
     @Autowired
     AuthorRepository authorRepository;
 
-    public void saveOrUpdate(Author author ){
+    public Author saveOrUpdate(Author author ){
         authorRepository.save(author);
+        return author;
     }
 
     public Optional<Author> getAuthorByemailId(String isbn){

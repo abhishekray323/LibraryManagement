@@ -21,22 +21,32 @@ public class CatalogueService {
     @Autowired
     BooksService booksService;
 
-    public Books addBookToCatalogue(CreateBookRequest createBookRequest){
-        var inMemoryBook = createBookRequest.toBook();
-        Optional<Author> existingAuthor = authorService.getAuthorByemailId(inMemoryBook.getAssociatedAuthor().getEmailId());
+    Author checkIfAuthorExistOrNotAndAddAuthorIfNotExist(Books book){
+        Optional<Author> existingAuthor = authorService.getAuthorByemailId(book.getAssociatedAuthor().getEmailId());
+        return existingAuthor.orElseGet(() -> authorService.saveOrUpdate(book.getAssociatedAuthor())).get();
+    }
 
-        if(existingAuthor.isEmpty()){
-            authorService.saveOrUpdate(inMemoryBook.getAssociatedAuthor());
-        }
-
-        Optional<Books> existingBooks = booksService.getBooksByIsbn(inMemoryBook.getIsbn());
-
+    Books saveInMemoryBookAndIfNotExistThrowError(Books books) throws  BookAlreadyExistException{
+        Optional<Books> existingBooks = booksService.getBooksByIsbn(books.getIsbn());
         if(existingBooks.isPresent()){
             throw new BookAlreadyExistException(ExceptionCode.BOOK_ALREADY_EXISTS);
         }
+        return booksService.saveOrUpdate(books);
+    }
+    @Transactional
+    public Books addBookToCatalogue(CreateBookRequest createBookRequest){
+        // nice variable name "inMemoryBook"
+        var inMemoryBook = createBookRequest.toBook();
+        var author = checkIfAuthorExistOrNotAndAddAuthorIfNotExist(inMemoryBook);
+        inMemoryBook.setAssociatedAuthor(author);
 
-        //MAKE Controller after this
-        return booksService.saveOrUpdate(inMemoryBook);
+        Books savedBook;
+        try {
+            savedBook = saveInMemoryBookAndIfNotExistThrowError(inMemoryBook);
+        } catch (BookAlreadyExistException e) {
+            throw new RuntimeException(e);
+        }
+        return savedBook;
     }
 
     public Books getBooks( String isbn){

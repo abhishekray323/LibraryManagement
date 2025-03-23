@@ -25,6 +25,7 @@ public class Author {
     String name;
 
     @OneToMany(mappedBy = "associatedAuthor")
+    @ToString.Exclude
     List<Books> associatedBooks;
 
     @Column(nullable = false)

@@ -28,6 +28,7 @@ public class Books {
     @ManyToOne
     @JoinColumn
     @JsonIgnoreProperties(value="associatedBooks")
+    @ToString.Exclude
     Author associatedAuthor;
 
     @ManyToOne
