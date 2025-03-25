@@ -1,6 +1,6 @@
 package com.example.LibraryManagement.models.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.example.LibraryManagement.models.entity.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,22 +16,23 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Table(indexes = {@Index(name="UNIQUE_EMAIL", columnList = "emailId", unique = true)})
+public class Order {
 
-public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
-    String name;
+    @Enumerated(value = EnumType.STRING)
+    OrderStatus orderStatus;
 
-    @OneToMany(mappedBy = "associatedAuthor")
-    @JsonIgnoreProperties(value = "associatedAuthor")
-    @ToString.Exclude
-    List<Books> associatedBooks;
+    Long amountToBePayed;
 
-    @Column(nullable = false)
-    String emailId;
+    @ManyToOne
+    @JoinColumn
+    UserInfo createdBy;
+
+    @OneToMany(mappedBy = "mappedWithOrder")
+    List<Books> booksLent;
 
     @CreationTimestamp
     LocalDateTime creationTime;
